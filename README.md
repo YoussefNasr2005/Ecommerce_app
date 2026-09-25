@@ -193,7 +193,7 @@ API Request ──► Dio Interceptor
 | <img src="assets/images/photo5.jpg" width="220"/> | <img src="assets/images/photo6.jpg" width="220"/> | | |
 
 ### Donation Features
-| Donation Home | Select Clothes | Contact & Pickup | Donation Tracking |
+| Donation Home | Clothes Details | Contact & Pickup | Donation Tracking |
 |:---:|:---:|:---:|:---:|
 | <img src="assets/images/photo7.jpg" width="220"/> | <img src="assets/images/photo8.jpg" width="220"/> | <img src="assets/images/photo9.jpg" width="220"/> | <img src="assets/images/photo10.jpg" width="220"/> |
 
