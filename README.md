@@ -187,7 +187,7 @@ API Request ──► Dio Interceptor
 ## 📸 Screenshots
 
 ### E-Commerce Features
-| Home Screen | Product Details | Search | Cart & Profile |
+| Home Screen | Home Screen | Product Details | Cart & Profile & Search |
 |:---:|:---:|:---:|:---:|
 | <img src="assets/images/photo1.jpg" width="220"/> | <img src="assets/images/photo2.jpg" width="220"/> | <img src="assets/images/photo3.jpg" width="220"/> | <img src="assets/images/photo4.jpg" width="220"/> |
 | <img src="assets/images/photo5.jpg" width="220"/> | <img src="assets/images/photo6.jpg" width="220"/> | | |
