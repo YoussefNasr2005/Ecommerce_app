@@ -84,9 +84,8 @@ class RouterGenerationConfig {
         GoRoute(
             name: AppRoutes.donateScreen,
             path: AppRoutes.donateScreen,
-            builder: (context, state) => BlocProvider(
-                create: (context) => sl<DonationCubit>(),
-                child: const DonateScreen())),
+            builder: (context, state) => BlocProvider.value(
+                value: sl<DonationCubit>(), child: const DonateScreen())),
         GoRoute(
             name: AppRoutes.addressScreen,
             path: AppRoutes.addressScreen,
@@ -110,8 +109,9 @@ class RouterGenerationConfig {
             name: AppRoutes.selectClothesScreen,
             path: AppRoutes.selectClothesScreen,
             builder: (context, state) {
-              return BlocProvider(
-                create: (context) => sl<DonationCubit>(),
+              final cubit = state.extra as DonationCubit;
+              return BlocProvider.value(
+                value: cubit,
                 child: const SelectClothesScreen(),
               );
             }),

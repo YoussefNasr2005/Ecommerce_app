@@ -344,13 +344,13 @@ Widget _buildImpactSection() {
               Expanded(
                   child: _buildStatCard(
                       state.pendingDonation!.length.toString(),
-                      'Items Donated',
+                      'Pedning',
                       Icons.dry_cleaning_outlined)),
               const SizedBox(width: 12.0),
               Expanded(
                   child: _buildStatCard(
                       state.acceptedDonation!.length.toString(),
-                      'Donations',
+                      'Accepted',
                       Icons.inventory_2_outlined)),
               const SizedBox(width: 12.0),
               Expanded(

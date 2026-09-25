@@ -54,7 +54,7 @@ Future<void> setUpServicesLocator() async {
   sl.registerLazySingleton(() => CartCubit(sl<CartRepo>()));
   sl.registerLazySingleton(() => UserInfoCubit(sl<UserRepo>()));
   sl.registerLazySingleton(() => AuthCubit(sl<AuthRepo>()));
-  sl.registerFactory(() => DonationCubit(sl<DonationLocalDataSource>()));
+  sl.registerLazySingleton(() => DonationCubit(sl<DonationLocalDataSource>()));
   sl.registerFactory(() => RegisterCubit(sl<RegisterRepo>()));
   sl.registerFactory(() => ProductsCubit(sl<HomeRepo>()));
   sl.registerFactory(() => CategoriesCubit(sl<HomeRepo>()));

@@ -23,8 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const CartScreen(),
-    BlocProvider(
-        create: (context) => sl<DonationCubit>(), child: const DonateScreen()),
+    BlocProvider.value(value: sl<DonationCubit>(), child: const DonateScreen()),
     const AccountScreen(),
   ];
 

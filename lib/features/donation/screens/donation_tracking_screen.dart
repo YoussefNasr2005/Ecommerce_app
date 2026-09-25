@@ -45,8 +45,8 @@ class DonationTrackingScreen extends StatelessWidget {
                         'Your donation request has been submitted successfully.',
                     type: AnimatedSnackBarType.success,
                   );
-
-                  context.goNamed(AppRoutes.donateScreen);
+                  context.read<DonationCubit>().fetchAllDonations();
+                  context.goNamed(AppRoutes.mainScreen);
                 } else if (state is DonationErrorState) {
                   context.showAnimatedSnackBar(
                     message:
