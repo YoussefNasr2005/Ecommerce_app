@@ -1,7 +1,9 @@
 import 'package:ecommerce_app/core/networking/listener/network_listener_wrapper.dart';
+import 'package:ecommerce_app/core/routing/app_routes.dart';
 import 'package:ecommerce_app/core/routing/router_generation_config.dart';
 import 'package:ecommerce_app/core/styling/theme_data.dart';
 import 'package:ecommerce_app/core/utils/service_locator.dart';
+import 'package:ecommerce_app/features/address/cubit/user_info_cubit.dart';
 import 'package:ecommerce_app/features/auth/cubit/auth_cubit_.dart';
 import 'package:ecommerce_app/features/cart/cubit/cart_cubit.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setUpServicesLocator();
+  await setUpServicesLocator();
   runApp(const MyApp());
 }
 
@@ -24,14 +26,18 @@ class MyApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(
-              create: (context) => sl<CartCubit>(),
+            BlocProvider.value(
+              value: sl<UserInfoCubit>(),
             ),
-            BlocProvider(
-              create: (context) => sl<AuthCubit>(),
+            BlocProvider.value(
+              value: sl<CartCubit>(),
+            ),
+            BlocProvider.value(
+              value: sl<AuthCubit>(),
             ),
           ],
           child: MaterialApp.router(
+            scaffoldMessengerKey: AppRoutes.scaffoldMessengerKey,
             builder: (context, child) {
               return NetworkListenerWrapper(
                 child: child ?? const SizedBox.shrink(),

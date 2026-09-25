@@ -100,9 +100,9 @@ class AccountScreen extends StatelessWidget {
     );
   }
 
-  _showLogOutDialog(BuildContext context) {
+  _showLogOutDialog(BuildContext parentcontext) {
     showDialog(
-        context: context,
+        context: parentcontext,
         builder: (dialogContext) {
           return Dialog(
             backgroundColor: Colors.white,
@@ -137,21 +137,21 @@ class AccountScreen extends StatelessWidget {
                       style: AppStyles.grey12MediumStyle,
                     ),
                     HeightSpace(20.h),
-                    PrimayButtonWidget(
+                    PrimaryButtonWidget(
                       buttonText: 'Yes, Logout',
                       onPress: () async {
                         Navigator.of(dialogContext).pop();
-                        await context.read<AuthCubit>().logOut();
-                        if (context.mounted) {
-                          context.goNamed(AppRoutes.loginScreen);
+                        await parentcontext.read<AuthCubit>().logOut();
+                        if (parentcontext.mounted) {
+                          parentcontext.goNamed(AppRoutes.loginScreen);
                         }
                       },
                       buttonColor: const Color(0xffED1010),
                     ),
                     HeightSpace(12.h),
-                    PrimayButtonWidget(
+                    PrimaryButtonWidget(
                       buttonText: 'No, Cancel',
-                      onPress: () => context.pop(),
+                      onPress: () => Navigator.of(dialogContext).pop(),
                       textColor: AppColors.blackColor,
                       buttonColor: AppColors.whiteColor,
                     )

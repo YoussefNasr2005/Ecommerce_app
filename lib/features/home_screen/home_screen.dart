@@ -4,6 +4,8 @@ import 'package:ecommerce_app/core/styling/app_styles.dart';
 import 'package:ecommerce_app/core/widgets/custom_cubit_grid_widget.dart';
 import 'package:ecommerce_app/core/widgets/custom_text_field.dart';
 import 'package:ecommerce_app/core/widgets/spacing_widgets.dart';
+import 'package:ecommerce_app/features/address/cubit/user_info_cubit.dart';
+import 'package:ecommerce_app/features/address/cubit/user_info_state.dart';
 import 'package:ecommerce_app/features/home_screen/cubit/categories_cubit.dart';
 import 'package:ecommerce_app/features/home_screen/cubit/categories_state.dart';
 import 'package:ecommerce_app/features/home_screen/cubit/products_cubit.dart';
@@ -27,6 +29,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int selectedCategoryIndex = 0;
   String currentCat = 'All';
+
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -34,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     context.read<ProductsCubit>().fetchProducts();
     context.read<CategoriesCubit>().featchCategories();
+    context.read<UserInfoCubit>().getUserAddress();
   }
 
   @override
@@ -44,148 +48,169 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const HeightSpace(28),
-          SizedBox(
-            width: 335.w,
-            child: Text(
-              'Explore Products',
-              style: AppStyles.primaryHeadLinesStyle.copyWith(fontSize: 25.sp),
-            ),
-          ),
-          const HeightSpace(16),
-          Row(
-            children: [
-              CustomTextField(
-                controller: _searchController,
-                width: 270.w,
-                hintText: 'Search products ....',
-                onFieldSubmitted: (value) {
-                  final query = _searchController.text.trim();
-                  if (query.isNotEmpty) {
-                    context.pushNamed(AppRoutes.searchScreen, extra: query);
-                  }
-                  _searchController.clear();
-                },
+    return Scaffold(
+      appBar: AppBar(title:
+          BlocBuilder<UserInfoCubit, UserInfoState>(builder: (context, state) {
+        final userModel = context.read<UserInfoCubit>().currentUser;
+        final String firstName = (state is UserInfoLoadedState)
+            ? (state.userModel.firstName)
+            : (userModel?.firstName ?? 'There');
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Hello $firstName 👋',
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: Colors.grey.shade500,
+                fontWeight: FontWeight.w500,
               ),
-              const WidthSpace(8),
-              GestureDetector(
-                onTap: () {
-                  final query = _searchController.text.trim();
-                  if (query.isNotEmpty) {
-                    context.pushNamed(AppRoutes.searchScreen, extra: query);
-                  }
-                  _searchController.clear();
-                },
-                child: Container(
-                  width: 56.w,
-                  height: 56.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryColor,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
+            ),
+            const HeightSpace(4),
+            Text(
+              'Explore Products',
+              style: AppStyles.primaryHeadLinesStyle.copyWith(fontSize: 24.sp),
+            ),
+          ],
+        );
+      })),
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const HeightSpace(20),
+            Row(
+              children: [
+                CustomTextField(
+                  controller: _searchController,
+                  width: 270.w,
+                  hintText: 'Search products ....',
+                  onFieldSubmitted: (value) {
+                    final query = _searchController.text.trim();
+                    if (query.isNotEmpty) {
+                      context.pushNamed(AppRoutes.searchScreen, extra: query);
+                    }
+                    _searchController.clear();
+                  },
                 ),
-              )
-            ],
-          ),
-          const HeightSpace(16),
-          BlocBuilder<CategoriesCubit, CategoriesState>(
-            builder: (context, state) {
-              if (state is CategoriesLoadedState) {
-                final categories = state.categories;
-                return SizedBox(
-                  height: 40.h,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      final isSelected = selectedCategoryIndex == index;
-                      return GestureDetector(
-                        onTap: () {
-                          if (selectedCategoryIndex == index) return;
-
-                          setState(() {
-                            selectedCategoryIndex = index;
-                            currentCat = categories[index];
-                          });
-
-                          if (index == 0) {
-                            context.read<ProductsCubit>().fetchProducts();
-                          } else {
-                            context
-                                .read<ProductsCubit>()
-                                .fetchProductsCategories(categories[index]);
-                          }
-                        },
-                        child: CategoryItemWidget(
-                          categoryName: categories[index],
-                          isSelectedCtegory: isSelected,
-                        ),
-                      );
-                    },
+                const WidthSpace(8),
+                GestureDetector(
+                  onTap: () {
+                    final query = _searchController.text.trim();
+                    if (query.isNotEmpty) {
+                      context.pushNamed(AppRoutes.searchScreen, extra: query);
+                    }
+                    _searchController.clear();
+                  },
+                  child: Container(
+                    width: 56.w,
+                    height: 56.h,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: const Icon(
+                      Icons.search,
+                      color: Colors.white,
+                    ),
                   ),
-                );
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-          const HeightSpace(16),
-          Expanded(
-            child: BlocBuilder<ProductsCubit, ProductsState>(
+                )
+              ],
+            ),
+            const HeightSpace(16),
+            BlocBuilder<CategoriesCubit, CategoriesState>(
               builder: (context, state) {
-                return CustomCubitGridWidget<Product>(
-                  childAspectRatio: .5.h,
-                    isLoading: state is ProductsLoadinState ? true : false,
-                    errorMessage:
-                        state is ProductsErrorState ? state.errorMessage : null,
-                    items: state is ProductsLoadedState
-                        ? state.products.products
-                        : [],
-                    onRefresh: () async {
-                      if (currentCat == 'All') {
-                        await context.read<ProductsCubit>().fetchProducts();
-                      } else {
-                        await context
-                            .read<ProductsCubit>()
-                            .fetchProductsCategories(currentCat);
-                      }
-                    },
-                    itemBuilder: ((context, item, index) {
-                      if (state is ProductsLoadedState) {
-                        final product = state.products.products;
+                if (state is CategoriesLoadedState) {
+                  final categories = state.categories;
+                  return SizedBox(
+                    height: 40.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: categories.length,
+                      itemBuilder: (context, index) {
+                        final isSelected = selectedCategoryIndex == index;
+                        return GestureDetector(
+                          onTap: () {
+                            if (selectedCategoryIndex == index) return;
 
-                        return AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 500),
-                          child: SlideAnimation(
-                            verticalOffset: 100.0,
-                            child: FadeInAnimation(
-                              child: ProductItemWidget(
-                                product: product[index],
-                                onTap: () => context.pushNamed(
-                                    AppRoutes.productScreen,
-                                    extra: product[index]),
-                                verticalCard: true,
-                              ),
-                            ),
+                            setState(() {
+                              selectedCategoryIndex = index;
+                              currentCat = categories[index];
+                            });
+
+                            if (index == 0) {
+                              context.read<ProductsCubit>().fetchProducts();
+                            } else {
+                              context
+                                  .read<ProductsCubit>()
+                                  .fetchProductsCategories(categories[index]);
+                            }
+                          },
+                          child: CategoryItemWidget(
+                            categoryName: categories[index],
+                            isSelectedCtegory: isSelected,
                           ),
                         );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    }));
+                      },
+                    ),
+                  );
+                }
+                return const SizedBox.shrink();
               },
             ),
-          )
-        ],
+            const HeightSpace(16),
+            Expanded(
+              child: BlocBuilder<ProductsCubit, ProductsState>(
+                builder: (context, state) {
+                  return CustomCubitGridWidget<Product>(
+                      childAspectRatio: .5.h,
+                      isLoading: state is ProductsLoadinState ? true : false,
+                      errorMessage: state is ProductsErrorState
+                          ? state.errorMessage
+                          : null,
+                      items: state is ProductsLoadedState
+                          ? state.products.products
+                          : [],
+                      onRefresh: () async {
+                        if (currentCat == 'All') {
+                          await context.read<ProductsCubit>().fetchProducts();
+                        } else {
+                          await context
+                              .read<ProductsCubit>()
+                              .fetchProductsCategories(currentCat);
+                        }
+                      },
+                      itemBuilder: ((context, item, index) {
+                        if (state is ProductsLoadedState) {
+                          final product = state.products.products;
+
+                          return AnimationConfiguration.staggeredList(
+                            position: index,
+                            duration: const Duration(milliseconds: 500),
+                            child: SlideAnimation(
+                              verticalOffset: 100.0,
+                              child: FadeInAnimation(
+                                child: ProductItemWidget(
+                                  product: product[index],
+                                  onTap: () => context.pushNamed(
+                                      AppRoutes.productScreen,
+                                      extra: product[index]),
+                                  verticalCard: true,
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      }));
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

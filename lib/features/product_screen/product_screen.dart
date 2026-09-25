@@ -252,7 +252,7 @@ class ProductScreen extends StatelessWidget {
                             final isLoading =
                                 state is CartItemAddingLoadingState;
 
-                            return PrimayButtonWidget(
+                            return PrimaryButtonWidget(
                               isLoading: isLoading,
                               width: MediaQuery.of(context).size.width * 0.5,
                               buttonText: 'Add To Cart',

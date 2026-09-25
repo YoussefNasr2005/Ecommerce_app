@@ -127,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: const Center(child: LottieLoading()),
                         );
                       }
-                      return PrimayButtonWidget(
+                      return PrimaryButtonWidget(
                         buttonText: 'Sign in',
                         onPress: () {
                           if (formKey.currentState!.validate()) {

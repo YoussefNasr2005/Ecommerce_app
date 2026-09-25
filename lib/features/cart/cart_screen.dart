@@ -21,12 +21,6 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   @override
-  void initState() {
-    super.initState();
-    context.read<CartCubit>().fetchCarts();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -145,7 +139,7 @@ class _CartScreenState extends State<CartScreen> {
                     ),
                     const HeightSpace(24),
 
-                    PrimayButtonWidget(
+                    PrimaryButtonWidget(
                       buttonText: 'Go To Checkout',
                       trailingIcon: Icon(
                         Icons.payment,

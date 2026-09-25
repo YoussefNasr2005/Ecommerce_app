@@ -2,11 +2,16 @@ import 'package:ecommerce_app/core/routing/app_routes.dart';
 import 'package:ecommerce_app/core/utils/local_storage/storage_helper.dart';
 import 'package:ecommerce_app/core/utils/service_locator.dart';
 import 'package:ecommerce_app/features/address/address_screen.dart';
-import 'package:ecommerce_app/features/address/cubit/user_info_cubit.dart';
 import 'package:ecommerce_app/features/auth/cubit/register_cubit.dart';
 import 'package:ecommerce_app/features/auth/login_screen.dart';
 import 'package:ecommerce_app/features/auth/register_screen.dart';
 import 'package:ecommerce_app/features/cart/cart_screen.dart';
+import 'package:ecommerce_app/features/donation/cubit/donation_cubit.dart';
+import 'package:ecommerce_app/features/donation/screens/choose_organization_screen.dart';
+import 'package:ecommerce_app/features/donation/screens/contact_and_packup_screen.dart';
+import 'package:ecommerce_app/features/donation/screens/donate_screen.dart';
+import 'package:ecommerce_app/features/donation/screens/donation_tracking_screen.dart';
+import 'package:ecommerce_app/features/donation/screens/select_clothes_screen.dart';
 import 'package:ecommerce_app/features/home_screen/cubit/categories_cubit.dart';
 import 'package:ecommerce_app/features/home_screen/cubit/products_cubit.dart';
 import 'package:ecommerce_app/features/home_screen/models/products_model.dart';
@@ -77,20 +82,20 @@ class RouterGenerationConfig {
             path: AppRoutes.splashScreen,
             builder: (context, state) => const SplashScreen()),
         GoRoute(
-          name: AppRoutes.addressScreen,
-          path: AppRoutes.addressScreen,
-          builder: (context, state) => BlocProvider(
-              create: (context) => sl<UserInfoCubit>(),
-              child: const AddressScreen()),
-        ),
+            name: AppRoutes.donateScreen,
+            path: AppRoutes.donateScreen,
+            builder: (context, state) => BlocProvider(
+                create: (context) => sl<DonationCubit>(),
+                child: const DonateScreen())),
+        GoRoute(
+            name: AppRoutes.addressScreen,
+            path: AppRoutes.addressScreen,
+            builder: (context, state) => const AddressScreen()),
         GoRoute(
             name: AppRoutes.profileScreen,
             path: AppRoutes.profileScreen,
             builder: (context, state) {
-              return BlocProvider(
-                create: (context) => sl<UserInfoCubit>(),
-                child: const ProfileScreen(),
-              );
+              return const ProfileScreen();
             }),
         GoRoute(
             name: AppRoutes.searchScreen,
@@ -100,6 +105,41 @@ class RouterGenerationConfig {
               return BlocProvider(
                   create: (context) => sl<SearchCubit>(),
                   child: SearchScreen(query: query));
+            }),
+        GoRoute(
+            name: AppRoutes.selectClothesScreen,
+            path: AppRoutes.selectClothesScreen,
+            builder: (context, state) {
+              return BlocProvider(
+                create: (context) => sl<DonationCubit>(),
+                child: const SelectClothesScreen(),
+              );
+            }),
+        GoRoute(
+            name: AppRoutes.chooseOrganizationScreen,
+            path: AppRoutes.chooseOrganizationScreen,
+            builder: (context, state) {
+              final cubit = state.extra as DonationCubit;
+              return BlocProvider.value(
+                value: cubit,
+                child: const ChooseOrganizationScreen(),
+              );
+            }),
+        GoRoute(
+            name: AppRoutes.contactAndPickupScreen,
+            path: AppRoutes.contactAndPickupScreen,
+            builder: (context, state) {
+              final cubit = state.extra as DonationCubit;
+              return BlocProvider.value(
+                  value: cubit, child: const ContactAndPickupScreen());
+            }),
+        GoRoute(
+            name: AppRoutes.donationTrackingScreen,
+            path: AppRoutes.donationTrackingScreen,
+            builder: (context, state) {
+              final cubit = state.extra as DonationCubit;
+              return BlocProvider.value(
+                  value: cubit, child: const DonationTrackingScreen());
             }),
       ]);
 }

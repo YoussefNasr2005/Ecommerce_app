@@ -200,7 +200,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: LottieLoading(),
                       );
                     }
-                    return PrimayButtonWidget(
+                    return PrimaryButtonWidget(
                       buttonText: 'Create Account',
                       onPress: () {
                         if (formKey.currentState!.validate()) {

@@ -1,9 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StorageHelper {
-  final _secureStorage = const FlutterSecureStorage(
-    aOptions: AndroidOptions(resetOnError: true),
-  );
+  final FlutterSecureStorage _secureStorage;
+
+  StorageHelper(this._secureStorage);
   static const String _tokenKey = 'auth_token';
   static const String _refreshTokenKey = 'auth_refreshToken';
 

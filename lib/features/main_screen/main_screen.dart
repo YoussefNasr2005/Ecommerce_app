@@ -1,7 +1,10 @@
 import 'package:ecommerce_app/core/styling/app_colors.dart';
+import 'package:ecommerce_app/core/utils/service_locator.dart';
 import 'package:ecommerce_app/features/account/account_screen.dart';
 import 'package:ecommerce_app/features/cart/cart_screen.dart';
 import 'package:ecommerce_app/features/cart/cubit/cart_cubit.dart';
+import 'package:ecommerce_app/features/donation/cubit/donation_cubit.dart';
+import 'package:ecommerce_app/features/donation/screens/donate_screen.dart';
 import 'package:ecommerce_app/features/home_screen/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,50 +23,56 @@ class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     const HomeScreen(),
     const CartScreen(),
+    BlocProvider(
+        create: (context) => sl<DonationCubit>(), child: const DonateScreen()),
     const AccountScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: screens[currentIndex],
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          unselectedItemColor: Colors.grey,
-          elevation: 1,
-          selectedItemColor: AppColors.primaryColor,
-          currentIndex: currentIndex,
-          onTap: (value) {
-            setState(() {
-              currentIndex = value;
-            });
-            if (value == 1) {
+    return Scaffold(
+      body: screens[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        elevation: 1,
+        iconSize: 30.sp,
+        selectedItemColor: AppColors.primaryColor,
+        currentIndex: currentIndex,
+        onTap: (value) {
+          setState(() {
+            currentIndex = value;
+          });
+          switch (value) {
+            case 1:
               context.read<CartCubit>().fetchCarts();
-            }
-          },
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                  size: 30.sp,
-                ),
-                label: 'Home'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.shopping_cart,
-                  size: 30.sp,
-                ),
-                label: 'Cart'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.person_3_outlined,
-                  size: 30.sp,
-                ),
-                label: 'Account'),
-          ],
-        ),
+              break;
+            default:
+          }
+        },
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+              ),
+              label: 'Home'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.shopping_cart,
+              ),
+              label: 'Cart'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.volunteer_activism,
+              ),
+              label: 'Donate'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person_3_outlined,
+              ),
+              label: 'Account'),
+        ],
       ),
     );
   }
